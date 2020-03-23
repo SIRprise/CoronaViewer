@@ -11,7 +11,7 @@ namespace CoronaView
     /// <summary>
     /// This importer is specialized for the github csv data
     /// </summary>
-    public class CImporter
+    public class CImporter : ICImporter
     {
 
         public Dictionary<string,CCountryDataset> Import()

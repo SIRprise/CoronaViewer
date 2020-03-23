@@ -10,6 +10,17 @@ namespace CoronaView
         public string countryName = string.Empty;
         public List<CDateValue> container = new List<CDateValue>();
 
+        public CCountryDataset()
+        {
+
+        }
+
+        public CCountryDataset(string countryName, List<CDateValue> container)
+        {
+            this.countryName = countryName;
+            this.container = container;
+        }
+
         public override string ToString()
         {
             string valueString = String.Join("; ", container);
@@ -23,6 +34,13 @@ namespace CoronaView
         public int value;
         public double increaseRate = 0;
 
+        public string bundesland = "";
+        public string lk;
+        public string sex;
+        public int objectID;
+        public DateTime datenstand;
+        
+
         public CDateValue(DateTime date, int value)
         {
             this.date = date;
@@ -31,7 +49,7 @@ namespace CoronaView
 
         public override string ToString()
         {
-            return date.ToShortDateString() + ": " + value;
+            return date.ToShortDateString() + " " + bundesland + ": " + value;
         }
     }
 }
