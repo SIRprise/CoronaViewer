@@ -31,6 +31,13 @@ namespace CoronaView
             chart2.Series.Clear();
 
             foreach (var elem in countryContainer.Where(x => x.Value.container.Last().value>10000))
+            StripLine stripline = new StripLine();
+            stripline.Interval = 0;
+            stripline.IntervalOffset = 1-0.01;
+            stripline.StripWidth = 0.02;
+            stripline.Text = "Faktor 1.0";
+            stripline.BackColor = Color.Red;
+            chart2.ChartAreas["ChartArea1"].AxisY.StripLines.Add(stripline);
             {
                 var series = new Series(elem.Value.countryName);
                 series.ChartType = SeriesChartType.Line;
@@ -204,7 +211,9 @@ namespace CoronaView
                         if (Math.Abs(pos2.X - pointXPixel2) < 5 &&
                             Math.Abs(pos2.Y - pointYPixel2) < 5)
                         {
-                            tooltip2.Show("Date=" + DateTime.FromOADate(prop2.XValue).ToShortDateString() + ", IncreaseFactor=" + prop2.YValues[0], this.chart2,
+                            var doublingInDays = Math.Log(2, prop2.YValues[0]);
+
+                            tooltip2.Show("Date=" + DateTime.FromOADate(prop2.XValue).ToShortDateString() + ", IncreaseFactor=" + prop2.YValues[0] + " -> doubling in days: " + String.Format("{0:0.00}", doublingInDays), this.chart2,
                                             pos2.X, pos2.Y - 15);
                         }
                     }
