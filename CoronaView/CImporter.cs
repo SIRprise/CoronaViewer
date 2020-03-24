@@ -39,11 +39,18 @@ namespace CoronaView
                     string val = source2d[y, x];
 
                     string[] allowedFormats = { "M/d/yy" };//, "m/dd/yy", "mm/d/yy", "mm/dd/yy" }; //maybe first format needed only
-                    CDateValue data = new CDateValue(DateTime.ParseExact(datestring, allowedFormats, CultureInfo.InvariantCulture, DateTimeStyles.None), Int32.Parse(val));
-                    if(lastVal != 0)
-                        data.increaseRate = Int32.Parse(val) / (double)lastVal;
-                    lastVal = Int32.Parse(val);
-                    countryData.container.Add(data);
+                    try
+                    {
+                        CDateValue data = new CDateValue(DateTime.ParseExact(datestring, allowedFormats, CultureInfo.InvariantCulture, DateTimeStyles.None), Int32.Parse(val));
+                        if (lastVal != 0)
+                            data.increaseRate = Int32.Parse(val) / (double)lastVal;
+                        lastVal = Int32.Parse(val);
+                        countryData.container.Add(data);
+                    }
+                    catch (Exception)
+                    {
+                        lastVal = 0;
+                    }
                 }
                 resultDict.Add(countryData.countryName, countryData);
             }
@@ -60,7 +67,8 @@ namespace CoronaView
         /// <returns></returns>
         public string[,] Get2dSourceArray(string sourceData)
         {
-            string[] lines = sourceData.Split('\r');
+            string[] lines = sourceData.Split('\n');
+            lines = lines.Select(x => x.Trim()).Where(x => x.Length>0).ToArray();
 
             //make 2d array
             int numberRows = lines.Count();

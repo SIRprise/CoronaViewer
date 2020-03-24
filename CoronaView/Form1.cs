@@ -30,7 +30,7 @@ namespace CoronaView
             chart2.SuppressExceptions = true;
             chart2.Series.Clear();
 
-            foreach (var elem in countryContainer.Where(x => x.Value.container.Last().value>10000))
+            
             StripLine stripline = new StripLine();
             stripline.Interval = 0;
             stripline.IntervalOffset = 1-0.01;
@@ -38,13 +38,21 @@ namespace CoronaView
             stripline.Text = "Faktor 1.0";
             stripline.BackColor = Color.Red;
             chart2.ChartAreas["ChartArea1"].AxisY.StripLines.Add(stripline);
+
+            List<CCountryDataset> sortedList = (from elem in countryContainer.Select(x => x.Value) orderby elem.container.Last().value descending select elem).ToList();
+
+            //foreach (var elem in countryContainer.Where(x => x.Value.container.Last().value > 10000))
+            //foreach (var elem in countryContainer.Where(x => x.Key.Contains("Germany") || x.Key.Contains("Spain") || x.Key.Contains("Italy") || x.Key.Contains("France,France") || x.Key.Contains("Switzerland") || x.Key.Contains("Austria")))
+            foreach (var elem in sortedList.Take(5))
             {
-                var series = new Series(elem.Value.countryName);
+                //var elem = el.Value;
+                var series = new Series(elem.countryName);
+
                 series.ChartType = SeriesChartType.Line;
                 series.BorderWidth = 3;
                 //series.XValueType = ChartValueType.DateTime;
 
-                var dateFilteredList = elem.Value.container.Where(x => ((x.date >= dateTimePicker1.Value) && (x.date <= dateTimePicker2.Value)));
+                var dateFilteredList = elem.container.Where(x => ((x.date >= dateTimePicker1.Value) && (x.date <= dateTimePicker2.Value)));
 
                 series.Points.DataBindXY(dateFilteredList.Select(x => x.date).ToArray(), dateFilteredList.Select(y => y.value).ToArray());
                 series.Points[dateFilteredList.Count()-1].IsValueShownAsLabel = true;
@@ -63,7 +71,7 @@ namespace CoronaView
                 }
                 */
 
-                var series2 = new Series(elem.Value.countryName);
+                var series2 = new Series(elem.countryName);
                 series2.ChartType = SeriesChartType.Line;
                 series2.BorderWidth = 3;
                 //series.XValueType = ChartValueType.DateTime;
